@@ -33,6 +33,7 @@ public class Ptx.Window : Gtk.ApplicationWindow {
     file.file_set.connect (()=>{
       var r = new Reader (enodename.text, erowname.text);
       r.read (file.get_file ());
+      message ((r.document_element as GomElement).write_string ());
     });
     destroy.connect (Gtk.main_quit);
     title = "Separted Value XML Converter";
@@ -63,6 +64,7 @@ public class Ptx.Reader : GomDocument {
     while (line != null) {
       line = reader.read_line ();
       ln++;
+      if (line == null) continue;
       string[] props = line.split ("\t");
       if (props == null) continue;
       if (props.length <= 0) continue;
@@ -75,7 +77,7 @@ public class Ptx.Reader : GomDocument {
           var r = create_element (_child);
           var pn = titles.get (i);
           if (pn == null) continue;
-          r.set_property (pn, props[i]);
+          r.set_attribute (pn, props[i]);
           document_element.append_child (r);
         }
       }
