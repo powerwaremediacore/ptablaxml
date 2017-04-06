@@ -38,16 +38,37 @@
         "/share/vala",
         "*.la",
         "*.a"
-    ],
-    "modules": [
-        {
-            "name": "ptablaxml",
-            "sources": [
-                    {
-                        "type": "git",
-                        "url": "file:///home/despinosa/Proyectos/ptablaxml"
-                    }
-            ]
-        }
+    ],"modules": [
+      {
+        "name": "ligee",
+        "config-opts": ["--disable-introspection"],
+        "sources": [
+          {
+            "type": "archive",
+            "path": "libgee-0.18.1.tar.xz",
+            "sha256": "99686bbe5a9c89ba9502c25f61314ee8efa0dd2a1159c9a639afc1458c2839a2"
+          }
+        ]
+      },
+      {
+        "name": "gxml",
+        "config-opts": ["--disable-introspection"],
+        "sources": [
+          {
+            "type": "archive",
+            "path": "gxml-0.14.2.tar.xz",
+            "sha256": "7611d98b9b73c5b889a2553e477d6654fe2019caecc994ca168447f42cbd5317"
+          }
+        ]
+      },
+      {
+        "name": "ptablaxml",
+        "sources": [
+                {
+                    "type": "git",
+                    "url": "file:///home/despinosa/Proyectos/ptablaxml"
+                }
+        ]
+      }
     ]
 }
