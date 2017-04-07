@@ -13,6 +13,7 @@ public errordomain CsvReaderError {
 
 [GtkTemplate (ui="/mx/pwmc/cfdi/window.ui")]
 public class Ptx.Window : Gtk.ApplicationWindow {
+  private GLib.File _save = null;
   [GtkChild]
   private Gtk.Entry enodename;
   [GtkChild]
@@ -29,9 +30,36 @@ public class Ptx.Window : Gtk.ApplicationWindow {
   private Gtk.Box bxtitles;
   [GtkChild]
   private Gtk.Button bconvert;
+  [GtkChild]
+  private Gtk.Button bsave;
+  [GtkChild]
+  private Gtk.CheckButton cbtab;
+  [GtkChild]
+  private Gtk.Label lsave;
   construct {
     //GLib.Intl.textdomain(Config.GETTEXT_PACKAGE);
     //GLib.Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.PACKAGE_LOCALE_DIR);
+    file.file_set.connect (()=>{
+      var f = file.get_file ();
+      bsave.sensitive = true;
+      if (f.query_exists () && _save != null)
+        if (_save.query_exists ())
+          bconvert.sensitive = true;
+    });
+    bsave.clicked.connect (()=>{
+      var dlg = new Gtk.FileChooserDialog (
+        "Select File to Save to", this, Gtk.FileChooserAction.SAVE,
+        "_Cancel",
+        Gtk.ResponseType.CANCEL,
+        "_Save",
+        Gtk.ResponseType.ACCEPT);
+      if (dlg.run () == Gtk.ResponseType.ACCEPT) {
+        _save = dlg.get_file ();
+        lsave.label = _save.get_path ();
+        bconvert.sensitive = true;
+      }
+      dlg.destroy ();
+    });
     bconvert.clicked.connect (()=>{
       if (enodename.text == "" || erowname.text == "") return;
       var r = new Reader (enodename.text, erowname.text);
@@ -41,6 +69,8 @@ public class Ptx.Window : Gtk.ApplicationWindow {
     destroy.connect (Gtk.main_quit);
     title = "Separted Value XML Converter";
     infobar.hide ();
+    bconvert.sensitive = false;
+    bsave.sensitive = false;
   }
 }
 public class Ptx.Reader : GomDocument {
