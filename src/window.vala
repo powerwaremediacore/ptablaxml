@@ -40,6 +40,7 @@ public class Ptx.Window : Gtk.ApplicationWindow {
     });
     destroy.connect (Gtk.main_quit);
     title = "Separted Value XML Converter";
+    infobar.hide ();
   }
 }
 public class Ptx.Reader : GomDocument {
