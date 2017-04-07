@@ -27,10 +27,13 @@ public class Ptx.Window : Gtk.ApplicationWindow {
   private Gtk.Label lmessage;
   [GtkChild]
   private Gtk.Box bxtitles;
+  [GtkChild]
+  private Gtk.Button bconvert;
   construct {
     //GLib.Intl.textdomain(Config.GETTEXT_PACKAGE);
     //GLib.Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.PACKAGE_LOCALE_DIR);
-    file.file_set.connect (()=>{
+    bconvert.clicked.connect (()=>{
+      if (enodename.text == "" || erowname.text == "") return;
       var r = new Reader (enodename.text, erowname.text);
       r.read (file.get_file ());
       message ((r.document_element as GomElement).write_string ());
@@ -70,14 +73,17 @@ public class Ptx.Reader : GomDocument {
       if (props.length <= 0) continue;
       for (int i = 0; i < props.length; i++) {
         if (ln == 0) {
-          titles.add (props[i]);
+          message (props[i].to_ascii ());
+          titles.add (props[i].to_ascii ());
           continue;
         }
         if (titles.size != 0 && i < titles.size) {
           var r = create_element (_child);
-          var pn = titles.get (i);
-          if (pn == null) continue;
-          r.set_attribute (pn, props[i]);
+          for (int j = 0; j < titles.size; j++) {
+            var pn = titles.get (j);
+            if (pn == null) continue;
+            r.set_attribute (pn, props[j]);
+          }
           document_element.append_child (r);
         }
       }
