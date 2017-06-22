@@ -71,10 +71,15 @@ public class Ptx.Window : Gtk.ApplicationWindow {
     });
     bconvert.clicked.connect (()=>{
       if (enodename.text == "" || erowname.text == "") return;
+      if (_save == null) {
+        warning ("No file output selected");
+        return;
+      }
       try {
         var r = new Reader (enodename.text, erowname.text);
         r.read (file.get_file ());
         message ((r.document_element as GomElement).write_string ());
+        (r as GomDocument).write_file (_save);
       }
       catch (GLib.Error e) {
         warning ("Error reading file: "+e.message);
