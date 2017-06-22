@@ -21,6 +21,7 @@
  */
 
 using Gtk;
+using Ptx;
 
 int main (string[] args) {
     Gtk.init (ref args);

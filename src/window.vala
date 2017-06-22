@@ -28,7 +28,7 @@ public errordomain CsvReaderError {
   INVALID_FILE
 }
 
-[GtkTemplate (ui="/mx/pwmc/cfdi/window.ui")]
+[GtkTemplate (ui="/mx/pwmc/ptablaxml/window.ui")]
 public class Ptx.Window : Gtk.ApplicationWindow {
   private GLib.File _save = null;
   [GtkChild]
@@ -36,21 +36,13 @@ public class Ptx.Window : Gtk.ApplicationWindow {
   [GtkChild]
   private Gtk.Entry erowname;
   [GtkChild]
-  private Gtk.ListBox listbox;
-  [GtkChild]
   private Gtk.FileChooserButton file;
   [GtkChild]
   private Gtk.InfoBar infobar;
   [GtkChild]
-  private Gtk.Label lmessage;
-  [GtkChild]
-  private Gtk.Box bxtitles;
-  [GtkChild]
   private Gtk.Button bconvert;
   [GtkChild]
   private Gtk.Button bsave;
-  [GtkChild]
-  private Gtk.CheckButton cbtab;
   [GtkChild]
   private Gtk.Label lsave;
   construct {
@@ -79,9 +71,14 @@ public class Ptx.Window : Gtk.ApplicationWindow {
     });
     bconvert.clicked.connect (()=>{
       if (enodename.text == "" || erowname.text == "") return;
-      var r = new Reader (enodename.text, erowname.text);
-      r.read (file.get_file ());
-      message ((r.document_element as GomElement).write_string ());
+      try {
+        var r = new Reader (enodename.text, erowname.text);
+        r.read (file.get_file ());
+        message ((r.document_element as GomElement).write_string ());
+      }
+      catch (GLib.Error e) {
+        warning ("Error reading file: "+e.message);
+      }
     });
     destroy.connect (Gtk.main_quit);
     title = "Separted Value XML Converter";
@@ -93,7 +90,7 @@ public class Ptx.Window : Gtk.ApplicationWindow {
 public class Ptx.Reader : GomDocument {
   private Gee.ArrayList<string> titles = new Gee.ArrayList<string> ();
   private string _child;
-  public Reader (string root, string child)
+  public Reader (string root, string child) throws GLib.Error
     requires (root != "")
     requires (child != "")
   {
