@@ -30,7 +30,7 @@ public errordomain CsvReaderError {
 
 [GtkTemplate (ui="/mx/pwmc/ptablaxml/window.ui")]
 public class Ptx.Window : Gtk.ApplicationWindow {
-  private GLib.File _save = null;
+  private GLib.File _save = GLib.File.new_for_path (GLib.Environment.get_home_dir ());
   [GtkChild]
   private Gtk.Entry enodename;
   [GtkChild]
@@ -62,6 +62,8 @@ public class Ptx.Window : Gtk.ApplicationWindow {
         Gtk.ResponseType.CANCEL,
         "_Save",
         Gtk.ResponseType.ACCEPT);
+      if (_save != null)
+      try { dlg.set_file (_save); } catch {}
       if (dlg.run () == Gtk.ResponseType.ACCEPT) {
         _save = dlg.get_file ();
         lsave.label = _save.get_path ();
