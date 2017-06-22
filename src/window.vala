@@ -131,9 +131,11 @@ public class Ptx.Reader : GomDocument {
         }
         if (titles.size != 0 && i < titles.size) {
           var r = create_element (_child);
-          for (int j = 0; j < titles.size; j++) {
+          for (int j = 0; j < props.length; j++) {
+            if (j >= titles.size) continue;
             var pn = titles.get (j);
             if (pn == null) continue;
+            if (props[j] ==  null) continue;
             r.set_attribute (pn, props[j]);
           }
           document_element.append_child (r);
