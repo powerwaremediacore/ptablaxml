@@ -8,6 +8,7 @@ bin_PROGRAMS = $(VALA_TARGET)
 VALASOURCES= \
 	main.vala \
 	window.vala \
+	ptx-reader.vala \
 	$(NULL)
 
 ptablaxml_SOURCES = $(VALA_GTK_CSOURCES)

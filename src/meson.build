@@ -47,7 +47,8 @@ resources_dep = declare_dependency ( sources : [ resourcesc, resourcesh])
 
 valasources = files ([
 	'main.vala',
-	'window.vala'
+	'window.vala',
+	'ptx-reader.vala'
 ])
 
 sources = files ([
